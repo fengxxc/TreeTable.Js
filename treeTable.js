@@ -2,7 +2,7 @@
  * 将树形json数据转换成树形表格
  * @author ChenFeng
  * @version 1.0 2018-6-6
- * @see https://github.com/fengxxc/treeTable
+ * @see https://github.com/fengxxc/treeTableJs
  */
 function TreeTable(opts) {
 	var _opts = opts || {};
