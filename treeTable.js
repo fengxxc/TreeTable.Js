@@ -8,6 +8,8 @@ function TreeTable(opts) {
 	var _opts = opts || {};
 	var _id = _opts.tableId;
 	var _data = _opts.treeData;
+	var _showEndChild = _opts.showEndChild;
+	var _afterShowEndChild = _opts.afterShowEndChild;
 	var _footerCols = _opts.footerCols; // type is Array
 
 	// private:
@@ -31,14 +33,23 @@ function TreeTable(opts) {
 	function _getCell(htmlStr, nodeData) {
 		// 占据的行数
 		var colCount = nodeData.attributes.descendantCount || 1;
-		htmlStr.push('<td rowspan="'+colCount +'">');
-		htmlStr.push(nodeData.text+'');
-		htmlStr.push('</td>');
+			
 		if (nodeData.child) { // 如果有后代
+			htmlStr.push('<td rowspan="'+colCount +'">');
+			htmlStr.push(nodeData.text+'');
+			htmlStr.push('</td>');
 			var childNodes = nodeData.children;
 			for (var i = 0; i < childNodes.length; i++)
 				_getCell(htmlStr, childNodes[i]);
 		} else {
+			htmlStr.push('<td rowspan="'+colCount +'">');
+			if (_showEndChild) 
+				htmlStr.push(_showEndChild(nodeData));
+			else
+				htmlStr.push(nodeData.text+'');
+			htmlStr.push('</td>');
+			if (_afterShowEndChild) 
+				htmlStr.push(_afterShowEndChild(nodeData));
 			if (_footerCols) 
 				htmlStr.push(getFooterCols(_footerCols));
 			htmlStr.push('</tr>');
@@ -59,7 +70,7 @@ function TreeTable(opts) {
 		for (var i = 0, h = []; i < cols.length; i++) {
 			h.push('<td>');
 			h.push(cols[i]);
-			h.push('</td>')
+			h.push('</td>');
 		}
 		return h.join('');
 	}
@@ -75,5 +86,5 @@ function TreeTable(opts) {
 			var id = tableId || _id;
 			render(id, getTableHtml(_data));
 		}
-	}
+	};
 }
