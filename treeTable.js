@@ -8,8 +8,8 @@ function TreeTable(opts) {
 	var _opts = opts || {};
 	var _id = _opts.tableId;
 	var _data = _opts.treeData;
-	var _showEndChild = _opts.showEndChild;
-	var _afterShowEndChild = _opts.afterShowEndChild;
+	var _renderNode = _opts.renderNode;
+	var _afterEndChild = _opts.afterEndChild;
 	var _footerCols = _opts.footerCols; // type is Array
 
 	// private:
@@ -34,22 +34,19 @@ function TreeTable(opts) {
 		// 占据的行数
 		var colCount = nodeData.attributes.descendantCount || 1;
 			
-		if (nodeData.child) { // 如果有后代
-			htmlStr.push('<td rowspan="'+colCount +'">');
+		htmlStr.push('<td rowspan="'+colCount +'">');
+		if (_renderNode) 
+			htmlStr.push(_renderNode(nodeData));
+		else 
 			htmlStr.push(nodeData.text+'');
-			htmlStr.push('</td>');
+		htmlStr.push('</td>');
+		if (nodeData.child) { // 如果有后代
 			var childNodes = nodeData.children;
 			for (var i = 0; i < childNodes.length; i++)
 				_getCell(htmlStr, childNodes[i]);
 		} else {
-			htmlStr.push('<td rowspan="'+colCount +'">');
-			if (_showEndChild) 
-				htmlStr.push(_showEndChild(nodeData));
-			else
-				htmlStr.push(nodeData.text+'');
-			htmlStr.push('</td>');
-			if (_afterShowEndChild) 
-				htmlStr.push(_afterShowEndChild(nodeData));
+			if (_afterEndChild) // 最后节点渲染后
+				htmlStr.push(_afterEndChild(nodeData));
 			if (_footerCols) 
 				htmlStr.push(getFooterCols(_footerCols));
 			htmlStr.push('</tr>');

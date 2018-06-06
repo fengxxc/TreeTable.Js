@@ -148,12 +148,15 @@
 
 	var data2 = [{
 		"attributes": {
+			"level": 0,
 			"descendantCount": 12
 		},
 		"checked": false,
 		"child": true,
 		"children": [{
 			"attributes": {
+				"level": 1,
+				"FBZYH": "002",
 				"descendantCount": 7
 			},
 			"checked": false,
@@ -161,6 +164,7 @@
 			"children": [{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy1",
@@ -179,6 +183,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy2",
@@ -197,6 +202,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy3",
@@ -215,6 +221,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy4",
@@ -233,6 +240,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy5",
@@ -251,6 +259,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy6",
@@ -269,6 +278,7 @@
 			{
 				"attributes": {
 					"students": [],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "54070174-67c7-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy7",
@@ -291,6 +301,8 @@
 		},
 		{
 			"attributes": {
+				"level": 1,
+				"FBZYH": "001",
 				"descendantCount": 5
 			},
 			"checked": false,
@@ -351,6 +363,7 @@
 						"eac_createTime": "2018-05-29",
 						"eac_modifier": ""
 					}],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "f26c7388-6255-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy_sf001",
@@ -386,6 +399,7 @@
 						"eac_createTime": "2018-05-30",
 						"eac_modifier": ""
 					}],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "f26c7388-6255-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy_sf002",
@@ -421,6 +435,7 @@
 						"eac_createTime": "2018-05-30",
 						"eac_modifier": ""
 					}],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "f26c7388-6255-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy_sf003",
@@ -492,6 +507,7 @@
 						"eac_createTime": "2018-05-30",
 						"eac_modifier": ""
 					}],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "f26c7388-6255-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy_sf004",
@@ -527,6 +543,7 @@
 						"eac_createTime": "2018-05-30",
 						"eac_modifier": ""
 					}],
+					"level": 2,
 					"YEAR": "2018",
 					"ZYID": "f26c7388-6255-11e8-a8dc-00163e002f0f",
 					"BJDM": "hyy_sf005",
@@ -557,7 +574,7 @@
 		tableId: 'treeTable',
 		treeData: data2,
 		footerCols: ['<a href="#">启用/禁用</a>'],
-		afterShowEndChild: function (nodeData) {
+		afterEndChild: function (nodeData) {
 			var students = nodeData.attributes.students;
 			var stuNames = [];
 			for (var i = 0; i < students.length; i++) {
@@ -565,8 +582,15 @@
 			}
 			return '<td>'+ stuNames.join(', ') +'</td>';
 		},
-		showEndChild: function (nodeData) {
-			return nodeData.text + '~';
+		renderNode: function (nodeData) {
+			// return nodeData.text + '~';
+			if (nodeData.attributes.level == 1) {
+				var h = '<div style="position: absolute;"><input type="checkbox" /></div><div style="position:relative;margin-left:20px;">' + nodeData.text + '</div>';
+				// var h = '<td><input type="checkbox" /></td><td>' + nodeData.text + '</td>';
+				return h;
+			} else {
+				return nodeData.text;
+			}
 		}
 	});
 	treeTable.render();
