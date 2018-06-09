@@ -574,23 +574,22 @@
 		tableId: 'treeTable',
 		treeData: data2,
 		footerCols: ['<a href="#">启用/禁用</a>'],
-		afterEndChild: function (nodeData) {
+		afterEndChild: function (nodeData, nodeIndex) {
 			var students = nodeData.attributes.students;
 			var stuNames = [];
 			for (var i = 0; i < students.length; i++) {
 				stuNames.push(students[i].ea_xm);
 			}
-			return '<td>'+ stuNames.join(', ') +'</td>';
+			return '<td>'+ stuNames.join(', ') + ' nodeIndex: ' + nodeIndex +'</td>';
 		},
-		renderNode: function (nodeData) {
-			// return nodeData.text + '~';
+		renderNode: function (nodeData, nodeIndex) {
+			var h = nodeData.text;
 			if (nodeData.attributes.level == 1) {
-				var h = '<div style="position: absolute;"><input type="checkbox" /></div><div style="position:relative;margin-left:20px;">' + nodeData.text + '</div>';
+				h = '<div style="position: absolute;"><input type="checkbox" /></div><div style="position:relative;margin-left:20px;">' + nodeData.text + '</div>';
 				// var h = '<td><input type="checkbox" /></td><td>' + nodeData.text + '</td>';
-				return h;
-			} else {
-				return nodeData.text;
+				
 			}
+			return h + ' nodeIndex: ' + nodeIndex;
 		}
 	});
 	treeTable.render();
