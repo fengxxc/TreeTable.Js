@@ -23,7 +23,8 @@
 				<td>院系</td>
 				<td>专业（同专业号）</td>
 				<td>班级</td>
-				<td>学生</td>
+				<td>已分班学生</td>
+				<td>全部学生</td>
 				<td>操作</td>
 			</tr>
 		</thead>
@@ -574,15 +575,26 @@
 		tableId: 'treeTable',
 		treeData: data2,
 		footerCols: ['<a href="#">启用/禁用</a>'],
-		afterEndChild: function (nodeData, nodeIndex) {
+		afterEndChild: function (nodeData, nodeIndex, parentData, treeData) {
 			var students = nodeData.attributes.students;
 			var stuNames = [];
 			for (var i = 0; i < students.length; i++) {
 				stuNames.push(students[i].ea_xm);
 			}
-			return '<td>'+ stuNames.join(', ') + ' nodeIndex: ' + nodeIndex +'</td>';
+			var html = '<td>'+ stuNames.join(', ') + ' nodeIndex: ' + nodeIndex +'</td>';
+			if (nodeIndex == 0) {
+				var allStuNames = [];
+				for (var i = 0; i < parentData.children.length; i++) {
+					var stus = parentData.children[i].attributes.students;
+					for (var j = 0; j < stus.length; j++) {
+						allStuNames.push(stus[j].ea_xm);
+					}
+				}
+				html += '<td rowspan="'+ parentData.children.length +'">' + allStuNames.join(', ') + '</td>';
+			}
+			return html;
 		},
-		renderNode: function (nodeData, nodeIndex) {
+		renderNode: function (nodeData, nodeIndex, parentData, treeData) {
 			var h = nodeData.text;
 			if (nodeData.attributes.level == 1) {
 				h = '<div style="position: absolute;"><input type="checkbox" /></div><div style="position:relative;margin-left:20px;">' + nodeData.text + '</div>';

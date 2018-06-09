@@ -2,7 +2,7 @@
  * 将树形json数据转换成树形表格
  * @author ChenFeng
  * @version 1.0 2018-6-6
- * @see https://github.com/fengxxc/treeTableJs
+ * @see https://github.com/fengxxc/TreeTableJs
  */
 function TreeTable(opts) {
 	var _opts = opts || {};
@@ -30,23 +30,23 @@ function TreeTable(opts) {
 		var html = htmlStr.join('');
 		return html;
 	}
-	function _getCell(htmlStr, nodeData, nodeIndex) {
+	function _getCell(htmlStr, nodeData, nodeIndex, parentData) {
 		// 占据的行数
 		var colCount = nodeData.attributes.descendantCount || 1;
 			
 		htmlStr.push('<td rowspan="'+colCount +'">');
 		if (_renderNode) 
-			htmlStr.push(_renderNode(nodeData, nodeIndex));
+			htmlStr.push(_renderNode(nodeData, nodeIndex, parentData, _data));
 		else 
 			htmlStr.push(nodeData.text+'');
 		htmlStr.push('</td>');
 		if (nodeData.child) { // 如果有后代
 			var childNodes = nodeData.children;
 			for (var i = 0; i < childNodes.length; i++)
-				_getCell(htmlStr, childNodes[i], i);
+				_getCell(htmlStr, childNodes[i], i, nodeData);
 		} else {
 			if (_afterEndChild) // 最后节点渲染后
-				htmlStr.push(_afterEndChild(nodeData, nodeIndex));
+				htmlStr.push(_afterEndChild(nodeData, nodeIndex, parentData, _data));
 			if (_footerCols) 
 				htmlStr.push(getFooterCols(_footerCols));
 			htmlStr.push('</tr>');
@@ -54,8 +54,8 @@ function TreeTable(opts) {
 		}
 		return htmlStr;
 	}
-	function getCell(htmlStr, nodeData, nodeIndex) {
-		var htmlArr =  _getCell(htmlStr, nodeData, nodeIndex);
+	function getCell(htmlStr, nodeData, nodeIndex, parentData) {
+		var htmlArr =  _getCell(htmlStr, nodeData, nodeIndex, parentData);
 		htmlArr.unshift(htmlArr.pop());
 		return htmlArr.join('');
 	}
