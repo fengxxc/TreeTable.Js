@@ -9,7 +9,7 @@ function TreeTable(opts) {
 	var _id = _opts.tableId;
 	var _data = _opts.treeData;
 	var _renderNode = _opts.renderNode;
-	var _afterEndChild = _opts.afterEndChild;
+	var _afterEndNode = _opts.afterEndNode;
 	var _footerCols = _opts.footerCols; // type is Array
 
 	// private:
@@ -45,8 +45,8 @@ function TreeTable(opts) {
 			for (var i = 0; i < childNodes.length; i++)
 				_getCell(htmlStr, childNodes[i], i, nodeData);
 		} else {
-			if (_afterEndChild) // 最后节点渲染后
-				htmlStr.push(_afterEndChild(nodeData, nodeIndex, parentData, _data));
+			if (_afterEndNode) // 最后节点渲染后
+				htmlStr.push(_afterEndNode(nodeData, nodeIndex, parentData, _data));
 			if (_footerCols) 
 				htmlStr.push(getFooterCols(_footerCols));
 			htmlStr.push('</tr>');
